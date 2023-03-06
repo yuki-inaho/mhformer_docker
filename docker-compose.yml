@@ -1,0 +1,23 @@
+version: '2.3'
+
+services:
+  mhformer:
+    build: .
+    image: mhformer:latest
+    network_mode: "host"
+    runtime: nvidia
+    devices:
+      - /dev/dri:/dev/dri
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+      - NVIDIA_DRIVER_CAPABILITIES=all
+      - DISPLAY=${DISPLAY}
+      - QT_X11_NO_MITSHM=1
+      - XAUTHORITY=${XAUTHORITY}
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix
+      - /home/${USER}/.Xauthority:/home/${USER}/.Xauthority
+      - ./data:/root/MHFormer/data
+      - ./logs:/root/MHFormer/logs
+    privileged: yes
+    command: "/bin/bash -c 'while :; do sleep 1; done'"
